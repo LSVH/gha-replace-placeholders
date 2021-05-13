@@ -14,7 +14,7 @@ async function run(inject = {}) {
     const exclude = getInput("exclude").split("\n");
     const placeholders = getInput("placeholders").split("\n");
 
-    placeholders.forEach((placeholder) => {
+    placeholders.forEach(async (placeholder) => {
       const key = placeholder.replace(/([^\\])\=.*/, "$1").replace(/\\=/g, "=");
       const val = placeholder.replace(/(.*[^\\])\=/, "").replace(/\\=/g, "=");
 
