@@ -16,6 +16,10 @@ The file(s) where in the placeholders should be replaced. Default: All files (`.
     file2.txt
   ```
 
+### `exclude`
+
+The opposite of `include`, file(s) which should be ignored when replacing.
+
 ### `placeholders`
 
 **Required**: A key-value list of placeholders.

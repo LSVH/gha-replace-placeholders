@@ -5,10 +5,13 @@ branding:
   icon: repeat
   color: green
 inputs:
-  target:
+  include:
     required: false
     default: '.*'
     description: 'The file(s) where in the placeholders should be replaced'
+  exclude:
+    required: false
+    description: 'The file(s) where in the placeholders should NOT be replaced'
   placeholders:
     required: true
     description: 'A key-value list of placeholders'
