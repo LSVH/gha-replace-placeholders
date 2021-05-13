@@ -32,9 +32,9 @@ placeholders: |
   /^.*\/\/.*/g=
 ```
 
-# Outputs
+## Outputs
 
-## `changed-files`
+### `changed-files`
 
 A list of files what where changed during the replace operation.
 
