@@ -5,10 +5,10 @@ if (require.main === module) {
   run();
 }
 
-async function run(callback = {}) {
+async function run(inject = {}) {
   try {
-    const getInput = callback.getInput ?? core.getInput;
-    const setOutput = callback.setOutput ?? core.setOutput;
+    const getInput = inject.getInput || core.getInput;
+    const setOutput = inject.setOutput || core.setOutput;
 
     const include = getInput("include").split("\n");
     const exclude = getInput("exclude").split("\n");
