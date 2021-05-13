@@ -20,4 +20,4 @@ outputs:
     description: 'A list of files what where changed during the replace operation'
 runs:
   using: 'node12'
-  main: 'index.js'
+  main: 'dist/index.js'

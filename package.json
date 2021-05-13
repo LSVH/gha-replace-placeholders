@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Find and replace placeholders across files in the repository",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "build": "ncc build index.js -o dist --source-map --license licenses.txt"
+  },
   "repository": {
     "type": "git",
     "url": "github.com:LSVH/gha-replace-placeholders"
