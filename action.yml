@@ -1,0 +1,20 @@
+name: 'Replace Placeholders'
+description: 'Convert the list of releases to a changelog'
+author: LSVH
+branding:
+  icon: repeat
+  color: green
+inputs:
+  target:
+    required: false
+    default: '.*'
+    description: 'The file(s) where in the placeholders should be replaced'
+  placeholders:
+    required: true
+    description: 'A key-value list of placeholders'
+outputs:
+  changed-files:
+    description: 'A list of files what where changed during the replace operation'
+runs:
+  using: 'node12'
+  main: 'index.js'
