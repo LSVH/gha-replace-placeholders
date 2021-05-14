@@ -1,5 +1,5 @@
 const core = require("@actions/core");
-const replaceInFiles = require("replace-in-files");
+const replace = require("replace-in-file");
 
 if (require.main === module) {
   run();
@@ -10,41 +10,46 @@ async function run(inject = {}) {
     const getInput = inject.getInput || core.getInput;
     const setOutput = inject.setOutput || core.setOutput;
 
-    const include = getInput("include").split("\n");
-    const exclude = getInput("exclude").split("\n");
-    const placeholders = getInput("placeholders").split("\n");
+    const include = split(getInput("include"));
+    const exclude = split(getInput("exclude"));
+    const placeholders = split(getInput("placeholders"));
 
-    placeholders.forEach(async (placeholder) => {
-      const key = placeholder.replace(/([^\\])\=.*/, "$1").replace(/\\=/g, "=");
-      const val = placeholder.replace(/(.*[^\\])\=/, "").replace(/\\=/g, "=");
+    for (const placeholder of placeholders) {
+      const key = maybeRegExp(
+        unescapeEquals(placeholder.replace(/([^\\])\=.*/, "$1"))
+      );
+      const val = unescapeEquals(placeholder.replace(/(.*[^\\])\=/, ""));
 
       const options = {
-        from: isRegEx(key) ? new RegExp(key) : key,
+        from: key,
         to: val,
         files: include,
-        optionsForFiles: {
-          ignore: exclude,
-        },
+        ignore: exclude,
       };
 
-      const { changedFiles } = await replaceInFiles(options);
+      const { paths } = await replace(options);
 
-      setOutput("changed-files", changedFiles);
-    });
+      setOutput("changed-files", paths);
+    }
   } catch (error) {
-    core.setFailed(error.message);
+    const setFailed = inject.setFailed || core.setFailed;
+    setFailed(error.message);
   }
 }
 
-function isRegEx(str) {
-  let isValid = true;
-  try {
-    new RegExp(str);
-  } catch (e) {
-    isValid = false;
-  }
+function maybeRegExp(str) {
+  const flags = str.replace(/.*\/(?!.*(.).*\1)([gimy]*)$/, "$2");
+  const pattern = str.replace(new RegExp("^\/(.*)\/" + flags + "$"), "$1");
 
-  return isValid;
+  return flags !== str && pattern !== str ? new RegExp(pattern, flags) : str;
+}
+
+function split(str) {
+  return str != null ? str.split("\n").filter(Boolean) : [];
+}
+
+function unescapeEquals(str) {
+  return str.replace(/\\=/g, "=");
 }
 
 module.exports = { run };
